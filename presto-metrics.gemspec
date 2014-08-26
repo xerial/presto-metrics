@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = Presto::Metrics::VERSION
   spec.authors       = ["Taro L. Saito"]
   spec.email         = ["leo@xerial.org"]
-  spec.summary       = "Presto metric collection libary"
-  spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ""
+  spec.summary       = "Presto metric collection library"
+  spec.description   = "Library for collecting metrics through JMX REST API (/v1/jmx/mbean) of Presto"
+  spec.homepage      = "https://github.com/xerial/presto-metrics"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
