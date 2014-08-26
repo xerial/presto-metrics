@@ -39,6 +39,18 @@ module Presto
 	  		get_metrics("java.lang:type=Memory")
 	  	end
 
+	  	def gc_cms_metrics
+	  		get_metrics("java.lang:type=GarbageCollector,name=ConcurrentMarkSweep")
+	  	end
+
+	  	def gc_parnew_metrics
+	  		get_metrics("java.lang:type=GarbageCollector,name=ParNew")
+	  	end
+
+	  	def os_metrics
+	  		get_metrics("java.lang:type=OperatingSystem")
+	  	end
+
 	  	def query_manager_metrics
 	  		get_metrics("com.facebook.presto.execution:name=QueryManager")
 	  	end
