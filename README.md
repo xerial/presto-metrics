@@ -1,8 +1,8 @@
 # Presto::Metrics
 
-Presto is a distributed SQL engine, which launches coordinator and worker servers to process queries in a cluster. We need to monitor the states of these coordinators/workers. Presto::Metrics is a library for accessing these states from Ruby.
+Presto is a distributed SQL engine, which launches coordinator and worker servers to process distributed queries in a cluster. We need to monitor the states of these coordinators/workers. Presto::Metrics is a library for accessing these states from Ruby.
 
-Presto provides REST API for accessing JMX properties. Presto::Metrics accesses this REST API to extract JMX properties.
+Presto provides REST API for accessing JMX properties. Presto::Metrics accesses this REST API to extract JMX property values.
 
 ## Installation
 
