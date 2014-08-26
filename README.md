@@ -41,6 +41,8 @@ client.get_metrics("java.lang:type=OperatingSystem")
 # Retrieve a set of parameters
 client.query_manager_metrics(["executor.active_count", "executor.completed_task_count"])
 # => {:"executor.active_count"=>0, :"executor.completed_task_count"=>0}
+client.os_metrics([:system_load_average, :free_physical_memory_size])
+#=> {:free_physical_memory_size=>3690512384, :system_load_average=>2.33056640625}
 
 # Retrieve standard metrics
 client.memory_usage_metrics      # java.lang:Type=Memory
@@ -53,6 +55,8 @@ client.node_scheduler_metrics    # com.facebook.presto.execution:name=NodeSchedu
 client.task_executor_metrics     # com.facebook.presto.execution:name=TaskExecutor
 client.task_manager_metrics      # com.facebook.presto.execution:name=TaskManager
 
+# Retrieve the JSON representation of JMX properties
+client.get_json("java.lang:Type=Memory")
 
 ```
 
