@@ -6,8 +6,6 @@ module Presto
   module Metrics
 
   	class Client 
-		private :map_to_canonical_name, :to_canonical_name, :underscore
-
 	  	def initialize(opts={})
  			@host = opts[:host] || "localhost"
   			@port = opts[:port] || "8080"
@@ -33,8 +31,6 @@ module Presto
 	  	def get_attribute(mbean, attr_name) 
 			get_attributes(mbean).find {|obj| obj['name'] == attr_name } || {}
 	  	end
-
-
 
 	  	def map_to_canonical_name(name_arr) 
 	  		name_arr.map{|name| to_canonical_name(name)	}
@@ -104,6 +100,7 @@ module Presto
 	  		get_metrics("com.facebook.presto.execution:name=TaskManager", target_attr)
 	  	end
 
+		private :map_to_canonical_name, :to_canonical_name, :underscore
   	end 
   end
 end
