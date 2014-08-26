@@ -12,6 +12,7 @@ module Presto
  			@host = opts[:host] || "localhost"
   			@port = opts[:port] || "8080"
 		 	@endpoint = opts[:endpoint] || "http://#{@host}:#{@port}"
+		 	@mbean_path = opts[:mbean_path] || "/v1/jmx/mbean/"
 		 	@caml_case = opts[:caml_case] || false
 		end
 
@@ -20,7 +21,7 @@ module Presto
 	  	end
 
 	  	def get_json(mbean) 
-			resp = HTTParty.get("#{@endpoint}/v1/jmx/mbean/#{mbean}")
+			resp = HTTParty.get("#{@endpoint}#{@mbean_path}#{mbean}")
 			resp.body
 	  	end 
 
