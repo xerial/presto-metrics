@@ -38,9 +38,10 @@ client.os_metrics
 # This is equivalent to write as follows
 client.get_metrics("java.lang:type=OperatingSystem")
 
-# Retrieve a set of parameters
+# Retrieve a specific set of parameters
 client.query_manager_metrics(["executor.active_count", "executor.completed_task_count"])
 # => {:"executor.active_count"=>0, :"executor.completed_task_count"=>0}
+
 client.os_metrics([:system_load_average, :free_physical_memory_size])
 #=> {:free_physical_memory_size=>3690512384, :system_load_average=>2.33056640625}
 
@@ -58,11 +59,32 @@ client.task_manager_metrics      # com.facebook.presto.execution:name=TaskManage
 # Retrieve the JSON representation of JMX properties
 client.get_json("java.lang:Type=Memory")
 
+# Pretty print 
+puts JSON.pretty_generate(client.os_metrics)
+#{
+#  "max_file_descriptor_count": 65536,
+#  "open_file_descriptor_count": 320,
+#  "committed_virtual_memory_size": 18075004928,
+#  "free_physical_memory_size": 13036097536,
+#  "free_swap_space_size": 1043750912,
+#  "process_cpu_load": 0.03758729473939656,
+#  "process_cpu_time": 2473150000000,
+#  "system_cpu_load": 0.055929301372448566,
+#  "total_physical_memory_size": 15707783168,
+#  "total_swap_space_size": 1073737728,
+#  "version": "3.2.0-53-virtual",
+#  "available_processors": 4,
+#  "arch": "amd64",
+#  "system_load_average": 0.05,
+#  "name": "Linux",
+#  "object_name": "java.lang:type=OperatingSystem"
+#}
+
 ```
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/presto-metrics/fork )
+1. Fork it ( https://github.com/xerial/presto-metrics/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
