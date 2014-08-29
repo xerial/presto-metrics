@@ -60,24 +60,24 @@ client.task_manager_metrics      # com.facebook.presto.execution:name=TaskManage
 client.get_json("java.lang:Type=Memory")
 
 # Pretty print 
-puts JSON.pretty_generate(client.os_metrics)
+require 'pp'
+pp c.memory_usage_metrics
 #{
-#  "max_file_descriptor_count": 65536,
-#  "open_file_descriptor_count": 320,
-#  "committed_virtual_memory_size": 18075004928,
-#  "free_physical_memory_size": 13036097536,
-#  "free_swap_space_size": 1043750912,
-#  "process_cpu_load": 0.03758729473939656,
-#  "process_cpu_time": 2473150000000,
-#  "system_cpu_load": 0.055929301372448566,
-#  "total_physical_memory_size": 15707783168,
-#  "total_swap_space_size": 1073737728,
-#  "version": "3.2.0-53-virtual",
-#  "available_processors": 4,
-#  "arch": "amd64",
-#  "system_load_average": 0.05,
-#  "name": "Linux",
-#  "object_name": "java.lang:type=OperatingSystem"
+#  "verbose": false,
+#  "object_pending_finalization_count": 0,
+#  "heap_memory_usage": {
+#    "committed": 259522560,
+#    "init": 268435456,
+#    "max": 14962655232,
+#    "used": 84478072
+#  },
+#  "non_heap_memory_usage": {
+#    "committed": 163250176,
+#    "init": 159842304,
+#    "max": 471859200,
+#    "used": 53369528
+3  },
+#  "object_name": "java.lang:type=Memory"
 #}
 
 ```

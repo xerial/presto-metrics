@@ -10,16 +10,38 @@ module Presto
  			@host = opts[:host] || "localhost"
   			@port = opts[:port] || "8080"
 		 	@endpoint = opts[:endpoint] || "http://#{@host}:#{@port}"
-		 	@mbean_path = opts[:mbean_path] || "/v1/jmx/mbean/"
+		 	@mbean_path = opts[:mbean_path] || "/v1/jmx/mbean"
+		 	@query_path = opts[:query_path] || "/v1/query"
 		 	@caml_case = opts[:caml_case] || false
 		end
 
-		def get(mbean)
-			JSON.parse(get_json(mbean))
+
+		def get_mbean(mbean)
+			JSON.parse(get_mbean_json(mbean))
 	  	end
 
-	  	def get_json(mbean) 
-			resp = HTTParty.get("#{@endpoint}#{@mbean_path}#{mbean}")
+	  	def query_list(path="")
+	  		JSON.parse(get_query_json(path))
+	  	end
+
+	  	def list_queries 
+	  		query_list().each {|q|
+	  			s = q['session'] || {}
+	  			query = q['query'].gsub(/[\r\n]/, " ")[0..50]
+	  			c = [q['queryId'], s['user'], s['catalog'], s['schema'], s['source'], query]
+	  			puts c.join("\t")
+	  		}
+	  		0
+	  	end
+
+
+	  	def get_query_json(path="")
+			resp = HTTParty.get("#{@endpoint}#{@query_path}/#{path}")
+			resp.body
+	  	end
+
+	  	def get_mbean_json(mbean) 
+			resp = HTTParty.get("#{@endpoint}#{@mbean_path}/#{mbean}")
 			resp.body
 	  	end 
 
