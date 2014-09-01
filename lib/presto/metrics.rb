@@ -1,9 +1,35 @@
 require "presto/metrics/version"
 require 'httparty'
 require 'json'
+require 'jsonpath'
 
 module Presto
   module Metrics
+
+  	class Query 
+  		def initialize(client)
+  			@client = client
+  		end
+
+	  	def list
+	  		query_list().each {|q|
+	  			s = q['session'] || {}
+	  			query = q['query'].gsub(/[\r\n]/, " ")[0..50]
+	  			c = [q['queryId'], s['user'], s['catalog'], s['schema'], s['source'], query]
+	  			puts c.join("\t")
+	  		}
+	  		0
+	  	end
+
+	  	def find(id)
+	  		@client.get_query_json(id)
+	  	end
+
+	  	def query_list(path="")
+	  		JSON.parse(@client.get_query_json(path))
+	  	end
+
+  	end
 
   	class Client 
 	  	def initialize(opts={})
@@ -15,38 +41,51 @@ module Presto
 		 	@caml_case = opts[:caml_case] || false
 		end
 
+	  	MBEAN_ALIAS = {
+	  		"memory" => "java.lang:type=Memory",
+	  		"gc_cms" => "java.lang:type=GarbageCollector,name=ConcurrentMarkSweep",
+	  		"gc_parnew" => "java.lang:type=GarbageCollector,name=ParNew",
+	  		"os" => "java.lang:type=OperatingSystem",
+	  		"query_manager" => "com.facebook.presto.execution:name=QueryManager",
+	  		"query_execution" => "com.facebook.presto.execution:name=QueryExecution", 
+	  		"node_scheduler" => "com.facebook.presto.execution:name=NodeScheduler",
+	  		"task_executor" => "com.facebook.presto.execution:name=TaskExecutor",
+	  		"task_manager" => "com.facebook.presto.execution:name=TaskManager"
+	  	}
+
+
+		def path(path) 
+			c = path.split(/:/)
+			json = get_metrics(MBEAN_ALIAS[c[0]] || path)
+			return json if c.size <= 1
+
+			jp = JsonPath.new(c[1] || "")
+			jp.first(json)
+		end
+
+		def query 
+			Query.new(self)
+		end
 
 		def get_mbean(mbean)
 			JSON.parse(get_mbean_json(mbean))
 	  	end
 
-	  	def query_list(path="")
-	  		JSON.parse(get_query_json(path))
-	  	end
-
-	  	def list_queries 
-	  		query_list().each {|q|
-	  			s = q['session'] || {}
-	  			query = q['query'].gsub(/[\r\n]/, " ")[0..50]
-	  			c = [q['queryId'], s['user'], s['catalog'], s['schema'], s['source'], query]
-	  			puts c.join("\t")
-	  		}
-	  		0
-	  	end
-
-
-	  	def get_query_json(path="")
-			resp = HTTParty.get("#{@endpoint}#{@query_path}/#{path}")
-			resp.body
+	  	def get(path) 
+	  		resp = HTTParty.get("#{@endpoint}#{path}")
+	  		resp.body
 	  	end
 
 	  	def get_mbean_json(mbean) 
-			resp = HTTParty.get("#{@endpoint}#{@mbean_path}/#{mbean}")
-			resp.body
+	  		get("#{@mbean_path}/#{mbean}")
 	  	end 
 
+	  	def get_query_json(path="")
+			get("#{@query_path}/#{path}")
+	  	end
+
 	  	def get_attributes(mbean) 
-			json = get(mbean)
+			json = get_mbean(mbean)
 			json['attributes'] || []
 	  	end
 
@@ -79,12 +118,13 @@ module Presto
 	  		 	.each {|attr| 
 	  		 		c_name = to_canonical_name(attr['name'])
 	  		 		if c_target_attr.empty? || c_target_attr.include?(c_name)
-	  		 			key = @caml_case ? attr['name'] : underscore(attr['name']).to_sym 
+	  		 			key = @caml_case ? attr['name'] : underscore(attr['name'])
 	  		 			kv[key] = attr['value'] 
 	  		 		end
 	  		 	}
 	  		kv
 	  	end
+
 
 	  	def memory_usage_metrics(target_attr=[])
 	  		get_metrics("java.lang:type=Memory", target_attr)
