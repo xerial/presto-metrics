@@ -23,6 +23,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec"
 
   spec.add_runtime_dependency "httparty"
-  spec.add_runtime_dependency "jsonpath"
 
 end

@@ -1,7 +1,6 @@
 require "presto/metrics/version"
 require 'httparty'
 require 'json'
-require 'jsonpath'
 
 module Presto
   module Metrics
@@ -58,15 +57,26 @@ module Presto
 			c = path.split(/:/)
 			target = c[0]
 			mbean = @@MBEAN_ALIAS[target] || target
-			json = get_metrics(mbean)
-			return json if c.size <= 1
+			json_obj = get_metrics(mbean)
+			return json_obj if c.size <= 1
 			query_list = (c[1] || "").split(/,/)
 			result = {}
 			query_list.each{|q|
-				json_path = JsonPath.new(q)
-				result[q] = json_path.first(json)
+				path_elems = q.split("/")
+				target_elem = extract_path(json_obj, path_elems, 0)
+				result[q] = target_elem unless target_elem.nil?
 			}
 			result
+		end
+
+
+		def extract_path(json_obj, path, depth) 
+			return nil if json_obj.nil?
+			if depth >= path.length 
+				json_obj
+			else 
+				extract_path(json_obj[path[depth]], path, depth+1)
+			end
 		end
 
 		def query 
@@ -79,7 +89,11 @@ module Presto
 
 	  	def get(path) 
 	  		resp = HTTParty.get("#{@endpoint}#{path}")
-	  		resp.body
+	  		if resp.code == 200
+	  			resp.body 	  		
+	  		else
+	  			"{}"
+	  		end
 	  	end
 
 	  	def get_mbean_json(mbean) 

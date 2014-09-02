@@ -49,11 +49,11 @@ client.os_metrics([:system_load_average, :free_physical_memory_size])
 
 # Path queries
 client.path("os:physical_memory_size")
-# => {"os.free_physical_memory_size"=>55034294272}
+# => {"free_physical_memory_size"=>55034294272}
 
 # You can use comma-separated list of path queries
 client.path("memory:heap_memory_usage.used,non_heap_memory_usage.used")
-# => {"heap_memory_usage.used"=>926714864, "non_heap_memory_usage.used"=>108948488}
+# => {"heap_memory_usage/used"=>926714864, "non_heap_memory_usage/used"=>108948488}
 
 
 # Retrieve standard metrics
