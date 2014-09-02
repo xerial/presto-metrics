@@ -75,7 +75,15 @@ module Presto
 			if depth >= path.length 
 				json_obj
 			else 
-				extract_path(json_obj[path[depth]], path, depth+1)
+				if json_obj.kind_of?(Array)
+				   # Handle key, value pairs of GC information
+				   value = json_obj.find{|e| 
+				   	e.is_a?(Hash) && e['key'] == path[depth]
+				   }
+				   extract_path(value['value'], path, depth+1)
+				else
+					extract_path(json_obj[path[depth]], path, depth+1)
+				end
 			end
 		end
 
