@@ -41,7 +41,7 @@ module Presto
 		 	@caml_case = opts[:caml_case] || false
 		end
 
-	  	MBEAN_ALIAS = {
+	  	@@MBEAN_ALIAS = {
 	  		"memory" => "java.lang:type=Memory",
 	  		"gc_cms" => "java.lang:type=GarbageCollector,name=ConcurrentMarkSweep",
 	  		"gc_parnew" => "java.lang:type=GarbageCollector,name=ParNew",
@@ -56,11 +56,17 @@ module Presto
 
 		def path(path) 
 			c = path.split(/:/)
-			json = get_metrics(MBEAN_ALIAS[c[0]] || path)
+			target = c[0]
+			mbean = @@MBEAN_ALIAS[target] || target
+			json = get_metrics(mbean)
 			return json if c.size <= 1
-
-			jp = JsonPath.new(c[1] || "")
-			jp.first(json)
+			query_list = (c[1] || "").split(/,/)
+			result = {}
+			query_list.each{|q|
+				json_path = JsonPath.new(q)
+				result[q] = json_path.first(json)
+			}
+			result
 		end
 
 		def query 

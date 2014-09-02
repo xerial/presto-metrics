@@ -29,7 +29,8 @@ require 'presto/metrics'
 client = Presto::Metrics::Client.new  # Access to http://localhost:8080 in default
 
 # Alternatively, you can specify the host name and port number to use
-client = Presto::Metrics::Client.new(:host => "localhost", :port=>8081) 
+client = Presto::Metrics::Client.new(:host => "localhost", :port=>8080) 
+
 
 
 client.os_metrics
@@ -44,6 +45,16 @@ client.query_manager_metrics(["executor.active_count", "executor.completed_task_
 
 client.os_metrics([:system_load_average, :free_physical_memory_size])
 #=> {:free_physical_memory_size=>3690512384, :system_load_average=>2.33056640625}
+
+
+# Path queries
+client.path("os:physical_memory_size")
+# => {"os.free_physical_memory_size"=>55034294272}
+
+# You can use comma-separated list of path queries
+client.path("memory:heap_memory_usage.used,non_heap_memory_usage.used")
+# => {"heap_memory_usage.used"=>926714864, "non_heap_memory_usage.used"=>108948488}
+
 
 # Retrieve standard metrics
 client.memory_usage_metrics      # java.lang:Type=Memory
