@@ -52,7 +52,7 @@ client.path("os:physical_memory_size")
 # => {"free_physical_memory_size"=>55034294272}
 
 # You can use comma-separated list of path queries
-client.path("memory:heap_memory_usage.used,non_heap_memory_usage.used")
+client.path("memory:heap_memory_usage/used,non_heap_memory_usage/used")
 # => {"heap_memory_usage/used"=>926714864, "non_heap_memory_usage/used"=>108948488}
 
 
