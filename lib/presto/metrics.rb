@@ -29,6 +29,22 @@ module Presto
 	  		JSON.parse(@client.get_query_json(path))
 	  	end
 
+	  	def metrics 
+	  		query_list.map{|qi|
+	  			h = {}
+	  			h['query_id'] = qi['queryId'] || ""
+	  			h['state'] = qi['state'] || ""
+	  			session = qi['session'] || {}
+	  			h['source'] = session['source'] || ""
+	  			h['running_drivers'] = qi['runningDrivers'] || 0
+	  			h['queued_drivers'] = qi['queuedDrivers'] || 0
+	  			h['completed_drivers'] = qi['completedDrivers'] || 0
+	  			h['total_drivers'] = qi['totalDrivers'] || 0
+	  			h['elapsed_time'] = qi['elapsedTime'] || "0.0m"
+	  			h
+	  		}
+	  	end
+
   	end
 
   	class Client 
@@ -96,12 +112,12 @@ module Presto
 			JSON.parse(get_mbean_json(mbean))
 	  	end
 
-	  	def get(path) 
+	  	def get(path, default="{}") 
 	  		resp = HTTParty.get("#{@endpoint}#{path}")
 	  		if resp.code == 200
 	  			resp.body 	  		
 	  		else
-	  			"{}"
+	  			default
 	  		end
 	  	end
 
@@ -110,7 +126,7 @@ module Presto
 	  	end 
 
 	  	def get_query_json(path="")
-			get("#{@query_path}/#{path}")
+			get("#{@query_path}/#{path}","[]")
 	  	end
 
 	  	def get_attributes(mbean) 
