@@ -36,6 +36,7 @@ module Presto
 	  			h['state'] = qi['state'] || ""
 	  			session = qi['session'] || {}
 	  			h['source'] = session['source'] || ""
+	  			h['user'] = session['user'] || h['source'].gsub(/[^a-zA-Z0-9]/,'')
 	  			h['running_drivers'] = qi['runningDrivers'] || 0
 	  			h['queued_drivers'] = qi['queuedDrivers'] || 0
 	  			h['completed_drivers'] = qi['completedDrivers'] || 0
