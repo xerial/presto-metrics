@@ -22,7 +22,7 @@ module Presto
 	  	end
 
 	  	def find(id)
-	  		@client.get_query_json(id)
+	  		JSON.parse(@client.get_query_json(id))
 	  	end
 
 	  	def query_list(path="")
@@ -41,6 +41,10 @@ module Presto
 	  			h['completed_drivers'] = qi['completedDrivers'] || 0
 	  			h['total_drivers'] = qi['totalDrivers'] || 0
 	  			h['elapsed_time'] = qi['elapsedTime'] || "0.0m"
+	  			h['create_time'] = qi['createTime']
+	  			if(h['state'] == "FAILED")
+	  				h['errorCode'] = find(h['query_id'])['errorCode'] || {}
+	  			end
 	  			h
 	  		}
 	  	end
