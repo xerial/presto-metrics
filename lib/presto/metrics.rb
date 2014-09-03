@@ -1,6 +1,7 @@
 require "presto/metrics/version"
 require 'httparty'
 require 'json'
+require 'set'
 
 module Presto
   module Metrics
