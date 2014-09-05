@@ -31,7 +31,8 @@ module Presto
 	  	end
 
 	  	def metrics 
-	  		query_list.map{|qi|
+	  		ql = query_list
+	  		ql.map{|qi|
 	  			h = {}
 	  			h['query_id'] = qi['queryId'] || ""
 	  			h['state'] = qi['state'] || ""
@@ -45,9 +46,9 @@ module Presto
 	  			h['elapsed_time'] = qi['elapsedTime'] || "0.0m"
 	  			h['create_time'] = qi['createTime']
 	  			h['running_time'] = qi['endTime'] || Time.now.utc.iso8601(3)
-	  			if(h['state'] == "FAILED")
-	  				h['errorCode'] = find(h['query_id'])['errorCode'] || {}
-	  			end
+	  			#if(h['state'] == "FAILED")
+	  			#	h['errorCode'] = find(h['query_id'])['errorCode'] || {}
+	  			#end
 	  			h
 	  		}
 	  	end
