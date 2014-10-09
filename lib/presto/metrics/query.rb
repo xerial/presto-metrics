@@ -11,22 +11,39 @@ module Presto
   			@client = client
   		end
 
-  		def format_table(tbl) 
+  		def format_table(tbl, label:[], align:[], sep:" ") 
   			# Compute col length
   			col = {}
+  			label.each_with_index{|l, i| col[i] = l.length}
   			tbl.each{|row|
   				row.each_with_index {|cell, i| 
-  					l = cell.size
+  					l = cell.to_s.size if cell 
+  					l ||= 0
   					col[i] ||= l
-  					col[i] = [[col[i], l].max, 200].min
+  					col[i] = [[col[i], l].max, 150].min
   				}
   			}
+  			# print label
+  			line = []
+  			label.each_with_index{|l, i|
+  				line << l.to_s[0..col[i]].ljust(col[i])
+  			}
+  			puts line.join(sep)
   			tbl.each{|row|
   				line = []
   				row.each_with_index{|cell, i|
-  					line << cell[0..col[i]].ljust(col[i])
+  					str = cell.to_s[0..col[i]]
+  					a = align[i] || "l"
+  					case a 
+  					when "r"
+  						line << str.rjust(col[i])
+  					when "l"
+  						line << str.ljust(col[i])
+  					else
+  						line << str.ljust(col[i])
+  					end
   				}
-  				puts line.join("\t")
+  				puts line.join(sep)
   			}
   			0
   		end
@@ -36,9 +53,13 @@ module Presto
 	  		tbl = ql.map {|q|
 	  			s = q['session'] || {}
 	  			query = q['query'].gsub(/[\t\r\n]/, " ").gsub(/ {1,}/, " ").strip
-	  			[q['queryId'], q['elapsedTime'], q['state'], s['user'], s['catalog'], s['schema'], s['source'], query]
-	  		}
-	  		format_table tbl
+	  			[q['queryId'], q['elapsedTime'], q['state'], q['runningDrivers'], q['completedDrivers'], q['totalDrivers'], s['user'], s['catalog'], s['schema'], s['source'], query]
+	  		}.sort_by{|row| row[0]}
+	  		format_table(
+	  			tbl, 
+	  			:label => %w|query time state r f t user catalog schema source sql|,
+	  			:align => %w|r     r    r     r r r l    l       r      l      r  |
+	  		)
 	  	end
 
 	  	def find(id)
