@@ -1,17 +1,15 @@
-require "presto/metrics/client"
+require 'presto/metrics/client'
 require 'pp'
 
 module Presto
   module Metrics
-
-
 
   	class Query 
   		def initialize(client)
   			@client = client
   		end
 
-  		def format_table(tbl, label:[], align:[], sep:" ") 
+  		def format_table(tbl, label:[], align:[], sep:' ')
   			# Compute col length
   			col = {}
   			label.each_with_index{|l, i| col[i] = l.length}
@@ -33,11 +31,11 @@ module Presto
   				line = []
   				row.each_with_index{|cell, i|
   					str = cell.to_s[0..col[i]]
-  					a = align[i] || "l"
+  					a = align[i] || 'l'
   					case a 
-  					when "r"
+  					when 'r'
   						line << str.rjust(col[i])
-  					when "l"
+  					when 'l'
   						line << str.ljust(col[i])
   					else
   						line << str.ljust(col[i])
@@ -52,9 +50,10 @@ module Presto
 	  		ql = query_list
 	  		tbl = ql.map {|q|
 	  			s = q['session'] || {}
-	  			query = q['query'].gsub(/[\t\r\n]/, " ").gsub(/ {1,}/, " ").strip
+	  			query = q['query'].gsub(/[\t\r\n]/, ' ').gsub(/ {1,}/, ' ').strip
 	  			[q['queryId'], q['elapsedTime'], q['state'], q['runningDrivers'], q['completedDrivers'], q['totalDrivers'], s['user'], s['catalog'], s['schema'], s['source'], query]
-	  		}.sort_by{|row| row[0]}
+	  		}.sort_by{|row| row[0]}.reverse
+
 	  		format_table(
 	  			tbl, 
 	  			:label => %w|query time state r f t user catalog schema source sql|,
@@ -66,6 +65,10 @@ module Presto
 	  		JSON.parse(@client.get_query_json(id, "{}"))
 	  	end
 
+	  	def tasks(queryId) 
+	  		find(queryId)
+	  	end
+
 	  	def query_list(path="")
 	  		JSON.parse(@client.get_query_json(path))
 	  	end
@@ -74,16 +77,16 @@ module Presto
 	  		ql = query_list
 	  		ql.map{|qi|
 	  			h = {}
-	  			h['query_id'] = qi['queryId'] || ""
-	  			h['state'] = qi['state'] || ""
+	  			h['query_id'] = qi['queryId'] || ''
+	  			h['state'] = qi['state'] || ''
 	  			session = qi['session'] || {}
-	  			h['source'] = session['source'] || ""
+	  			h['source'] = session['source'] || ''
 	  			h['user'] = session['user'] || h['source'].gsub(/[^a-zA-Z0-9]/,'')
 	  			h['running_drivers'] = qi['runningDrivers'] || 0
 	  			h['queued_drivers'] = qi['queuedDrivers'] || 0
 	  			h['completed_drivers'] = qi['completedDrivers'] || 0
 	  			h['total_drivers'] = qi['totalDrivers'] || 0
-	  			h['elapsed_time'] = qi['elapsedTime'] || "0.0m"
+	  			h['elapsed_time'] = qi['elapsedTime'] || '0.0m'
 	  			h['create_time'] = qi['createTime']
 	  			h['running_time'] = qi['endTime'] || Time.now.utc.iso8601(3)
 	  			#if(h['state'] == "FAILED")

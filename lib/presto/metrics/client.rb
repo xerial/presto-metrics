@@ -9,24 +9,24 @@ module Presto
 	  		require 'set'
 	  		require 'time'
 
- 			@host = opts[:host] || "localhost"
-  			@port = opts[:port] || "8080"
+ 			@host = opts[:host] || 'localhost'
+  			@port = opts[:port] || '8080'
 		 	@endpoint = opts[:endpoint] || "http://#{@host}:#{@port}"
-		 	@mbean_path = opts[:mbean_path] || "/v1/jmx/mbean"
-		 	@query_path = opts[:query_path] || "/v1/query"
+		 	@mbean_path = opts[:mbean_path] || '/v1/jmx/mbean'
+		 	@query_path = opts[:query_path] || '/v1/query'
 		 	@caml_case = opts[:caml_case] || false
 		end
 
 	  	@@MBEAN_ALIAS = {
-	  		"memory" => "java.lang:type=Memory",
-	  		"gc_cms" => "java.lang:type=GarbageCollector,name=ConcurrentMarkSweep",
-	  		"gc_parnew" => "java.lang:type=GarbageCollector,name=ParNew",
-	  		"os" => "java.lang:type=OperatingSystem",
-	  		"query_manager" => "com.facebook.presto.execution:name=QueryManager",
-	  		"query_execution" => "com.facebook.presto.execution:name=QueryExecution", 
-	  		"node_scheduler" => "com.facebook.presto.execution:name=NodeScheduler",
-	  		"task_executor" => "com.facebook.presto.execution:name=TaskExecutor",
-	  		"task_manager" => "com.facebook.presto.execution:name=TaskManager"
+	  		'memory' => 'java.lang:type=Memory',
+	  		'gc_cms' => 'java.lang:type=GarbageCollector,name=ConcurrentMarkSweep',
+	  		'gc_parnew' => 'java.lang:type=GarbageCollector,name=ParNew',
+	  		'os' => 'java.lang:type=OperatingSystem',
+	  		'query_manager' => 'com.facebook.presto.execution:name=QueryManager',
+	  		'query_execution' => 'com.facebook.presto.execution:name=QueryExecution',
+	  		'node_scheduler' => 'com.facebook.presto.execution:name=NodeScheduler',
+	  		'task_executor' => 'com.facebook.presto.execution:name=TaskExecutor',
+	  		'task_manager' => 'com.facebook.presto.execution:name=TaskManager'
 	  	}
 
 
@@ -36,10 +36,10 @@ module Presto
 			mbean = @@MBEAN_ALIAS[target] || target
 			json_obj = get_metrics(mbean)
 			return json_obj if c.size <= 1
-			query_list = (c[1] || "").split(/,/)
+			query_list = (c[1] || '').split(/,/)
 			result = {}
 			query_list.each{|q|
-				path_elems = q.split("/")
+				path_elems = q.split('/')
 				target_elem = extract_path(json_obj, path_elems, 0)
 				result[q] = target_elem unless target_elem.nil?
 			}
@@ -72,7 +72,7 @@ module Presto
 			JSON.parse(get_mbean_json(mbean))
 	  	end
 
-	  	def get(path, default="{}") 
+	  	def get(path, default='{}')
 	  		resp = HTTParty.get("#{@endpoint}#{path}")
 	  		if resp.code == 200
 	  			resp.body 	  		
@@ -85,7 +85,7 @@ module Presto
 	  		get("#{@mbean_path}/#{mbean}")
 	  	end 
 
-	  	def get_query_json(path="", default="[]")
+	  	def get_query_json(path='', default='[]')
 			get("#{@query_path}/#{path}",default)
 	  	end
 
@@ -103,14 +103,14 @@ module Presto
 		end
 
 		def to_canonical_name(name) 
-	  		name.to_s.downcase.gsub(/_/, "")
+	  		name.to_s.downcase.gsub(/_/, '')
 	  	end
 
   	    def underscore(str)
 	    	str.gsub(/::/, '/').
 		    gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
 	    	gsub(/([a-z\d])([A-Z])/,'\1_\2').
-		    tr("-", "_").
+		    tr('-', '_').
 		    downcase
 		end
 
@@ -132,39 +132,39 @@ module Presto
 
 
 	  	def memory_usage_metrics(target_attr=[])
-	  		get_metrics("java.lang:type=Memory", target_attr)
+	  		get_metrics('java.lang:type=Memory', target_attr)
 	  	end
 
 	  	def gc_cms_metrics(target_attr=[])
-	  		get_metrics("java.lang:type=GarbageCollector,name=ConcurrentMarkSweep", target_attr)
+	  		get_metrics('java.lang:type=GarbageCollector,name=ConcurrentMarkSweep', target_attr)
 	  	end
 
 	  	def gc_parnew_metrics(target_attr=[])
-	  		get_metrics("java.lang:type=GarbageCollector,name=ParNew", target_attr)
+	  		get_metrics('java.lang:type=GarbageCollector,name=ParNew', target_attr)
 	  	end
 
 	  	def os_metrics(target_attr=[])
-	  		get_metrics("java.lang:type=OperatingSystem", target_attr)
+	  		get_metrics('java.lang:type=OperatingSystem', target_attr)
 	  	end
 
 	  	def query_manager_metrics(target_attr=[])
-	  		get_metrics("com.facebook.presto.execution:name=QueryManager", target_attr)
+	  		get_metrics('com.facebook.presto.execution:name=QueryManager', target_attr)
 	  	end
 
 	  	def query_execution_metrics(target_attr=[])
-	  		get_metrics("com.facebook.presto.execution:name=QueryExecution", target_attr)
+	  		get_metrics('com.facebook.presto.execution:name=QueryExecution', target_attr)
 	  	end
 
 	  	def node_scheduler_metrics(target_attr=[])
-	  		get_metrics("com.facebook.presto.execution:name=NodeScheduler", target_attr)
+	  		get_metrics('com.facebook.presto.execution:name=NodeScheduler', target_attr)
 	  	end
 
 	  	def task_executor_metrics(target_attr=[])
-	  		get_metrics("com.facebook.presto.execution:name=TaskExecutor", target_attr)
+	  		get_metrics('com.facebook.presto.execution:name=TaskExecutor', target_attr)
 	  	end
 
 	  	def task_manager_metrics(target_attr=[])
-	  		get_metrics("com.facebook.presto.execution:name=TaskManager", target_attr)
+	  		get_metrics('com.facebook.presto.execution:name=TaskManager', target_attr)
 	  	end
 
 		private :map_to_canonical_name, :to_canonical_name, :underscore
