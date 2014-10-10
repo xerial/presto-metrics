@@ -57,17 +57,33 @@ module Presto
 	  		format_table(
 	  			tbl, 
 	  			:label => %w|query time state r f t user catalog schema source sql|,
-	  			:align => %w|r     r    r     r r r l    l       r      l      r  |
+	  			:align => %w|r     r    r     r r r l    l       r      l      l  |
 	  		)
 	  	end
 
-	  	def find(id)
-	  		JSON.parse(@client.get_query_json(id, "{}"))
+	  	def find(queryId)
+	  		JSON.parse(@client.get_query_json(queryId, "{}"))
 	  	end
 
-	  	def tasks(queryId) 
-	  		find(queryId)
-	  	end
+	  	def task_list(queryId)
+	  		qj = find(queryId) || {}
+        root_stage = qj['outputStage'] || []
+        tasks = root_stage['tasks'] || []
+        tasks << find_tasks(root_stage['subStages'])
+        tasks.flatten
+      end
+
+      def tasks(queryId)
+        tl = task_list(queryId)
+        stats = tl.map {|t|
+          s = t['stats']
+          [t['taskId'], s['processedInputPositions'], s['outputPositions'], s['outputDataSize']]
+        }
+        format_table(stats,
+                     :label => %w|task_id input_pos output_pos output_size|,
+                     :align => %w|l       r         r          r|
+        )
+      end
 
 	  	def query_list(path="")
 	  		JSON.parse(@client.get_query_json(path))
@@ -96,6 +112,20 @@ module Presto
 	  		}
 	  	end
 
-  	end
+    end
+
+    private
+
+    def find_tasks(sub_stages)
+      task_list = []
+      return task_list unless sub_stages
+      sub_stages.each{|ss|
+        tl = ss['tasks']
+        task_list << tl if tl
+        task_list << find_tasks(ss['subStages'])
+      }
+      task_list.flatten()
+    end
+
   end
 end
