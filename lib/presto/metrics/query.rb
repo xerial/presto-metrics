@@ -77,11 +77,11 @@ module Presto
         tl = task_list(queryId)
         stats = tl.map {|t|
           s = t['stats']
-          [t['taskId'], s['processedInputPositions'], s['outputPositions'], s['outputDataSize']]
+          [t['taskId'], t['state'], s['processedInputPositions'], s['outputDataSize']]
         }
         format_table(stats,
-                     :label => %w|task_id input_pos output_pos output_size|,
-                     :align => %w|l       r         r          r|
+                     :label => %w|task_id state processed_rows size|,
+                     :align => %w|l       l     r          r|
         )
       end
 
