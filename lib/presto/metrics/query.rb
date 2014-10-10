@@ -77,17 +77,27 @@ module Presto
         tl = task_list(queryId)
         stats = tl.map {|t|
           s = t['stats']
-          [t['taskId'], t['state'], s['processedInputPositions'], s['outputDataSize']]
+          host = (t['self'] || '').sub(/http:\/\/([a-z0-9\-.]+)[\/:].*/, '\1')
+          [t['taskId'], host, t['state'], s['rawInputPositions'], s['rawInputDataSize'], s['queuedDrivers'], s['runningDrivers'], s['completedDrivers']]
         }
         format_table(stats,
-                     :label => %w|task_id state processed_rows size|,
-                     :align => %w|l       l     r          r|
+                     :label => %w|task_id host    state processed_rows size|,
+                     :align => %w|l       l       l     r          r|
         )
       end
 
 	  	def query_list(path="")
 	  		JSON.parse(@client.get_query_json(path))
 	  	end
+
+      def running_list
+        ql = query_list.select{|q| q['state'] == 'RUNNING'}
+        ql.each{|q|
+          tasks(q['queryId'])
+        }
+      end
+
+
 
 	  	def metrics 
 	  		ql = query_list
