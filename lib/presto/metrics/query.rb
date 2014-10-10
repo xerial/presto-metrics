@@ -77,7 +77,7 @@ module Presto
         tl = task_list(queryId)
         stats = tl.map {|t|
           s = t['stats']
-          host = (t['self'] || '').sub(/http:\/\/([a-z0-9\-.]+)[\/:].*/, '\1')
+          host = (t['self'] || '').sub(/http:\/\/([a-z0-9\-.]+[\/:][0-9]+)\/.*/, '\1')
           [t['taskId'], host, t['state'], s['rawInputPositions'], s['rawInputDataSize'], s['queuedDrivers'], s['runningDrivers'], s['completedDrivers']]
         }
         format_table(stats,
@@ -95,6 +95,7 @@ module Presto
         ql.each{|q|
           tasks(q['queryId'])
         }
+        ql.size
       end
 
 
