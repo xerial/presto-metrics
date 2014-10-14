@@ -91,7 +91,7 @@ module Presto
 	  	end
 
       def running_list
-        ql = query_list.select{|q| q['state'] == 'RUNNING'}
+        ql = query_list.select{|q| q['state'] == 'RUNNING'}.sort_by{|row| row[0]}.reverse
         ql.each{|q|
           tasks(q['queryId'])
         }
