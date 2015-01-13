@@ -1,5 +1,10 @@
 require 'presto/metrics/client'
+require 'presto-client'
+# Use httpclient for faster json retrieval
+Faraday.default_adapter = :httpclient
+require 'presto/client/models'
 require 'pp'
+include Presto::Client::Models
 
 module Presto
   module Metrics
@@ -96,9 +101,28 @@ module Presto
           tasks(q['queryId'])
         }
         ql.size
-      end
+			end
 
+			private :count_total_processed_rows
 
+			def count_total_processed_rows(stage)
+				rows = stage.tasks.map{|t| t.stats.processed_input_positions }.inject(0, :+)
+				rows + stage.sub_stages.map{|ss| count_total_processed_rows(ss) }.inject(0, :+)
+			end
+
+			def active_queries
+				running_queries = query_list.map{|q| QueryInfo.decode(q) }.select{|q| q.state == :running }
+		    query_info = running_queries.map{|q|
+					queryInfo = find(q.query_id)
+					QueryInfo.decode(queryInfo)
+				}
+
+				query_info.map{|q|
+				   os = q.output_stage
+			     total_rows = count_total_processed_rows(os)
+					 "#{q.query_id}, #{total_rows}"
+				}
+			end
 
 	  	def metrics 
 	  		ql = query_list
@@ -121,22 +145,22 @@ module Presto
 	  			#end
 	  			h
 	  		}
-	  	end
+      end
+
+
+
+
+      def find_tasks(sub_stages)
+        task_list = []
+        return task_list unless sub_stages
+        sub_stages.each{|ss|
+          tl = ss['tasks']
+          task_list << tl if tl
+          task_list << find_tasks(ss['subStages'])
+        }
+        task_list.flatten()
+      end
 
     end
-
-    private
-
-    def find_tasks(sub_stages)
-      task_list = []
-      return task_list unless sub_stages
-      sub_stages.each{|ss|
-        tl = ss['tasks']
-        task_list << tl if tl
-        task_list << find_tasks(ss['subStages'])
-      }
-      task_list.flatten()
-    end
-
   end
 end
