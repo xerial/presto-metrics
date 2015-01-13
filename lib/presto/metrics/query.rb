@@ -110,18 +110,19 @@ module Presto
 				rows + stage.sub_stages.map{|ss| count_total_processed_rows(ss) }.inject(0, :+)
 			end
 
-			def active_queries
+			def query_progress
 				running_queries = query_list.map{|q| QueryInfo.decode(q) }.select{|q| q.state == :running }
 		    query_info = running_queries.map{|q|
 					queryInfo = find(q.query_id)
 					QueryInfo.decode(queryInfo)
 				}
 
-				query_info.map{|q|
+				result = {}
+				query_info.each{|q|
 				   os = q.output_stage
-			     total_rows = count_total_processed_rows(os)
-					 "#{q.query_id}, #{total_rows}"
+					 result[q.query_id] = count_total_processed_rows(os)
 				}
+				result
 			end
 
 	  	def metrics 
