@@ -105,7 +105,6 @@ module Presto
         ql.size
 			end
 
-			private :count_total_processed_rows
 
 			def count_total_processed_rows(stage)
 				rows = stage.tasks.map{|t| t.stats.raw_input_positions }.inject(0, :+)
