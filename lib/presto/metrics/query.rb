@@ -107,8 +107,8 @@ module Presto
 
 
 			def count_total_processed_rows(stage)
-				rows = stage.tasks.map{|t| t.stats.raw_input_positions }.inject(0, :+)
-				rows + stage.sub_stages.map{|ss| count_total_processed_rows(ss) }.inject(0, :+)
+				rows = (stage.tasks || []).map{|t| t.stats.raw_input_positions }.inject(0, :+)
+				rows + (stage.sub_stages || []).map{|ss| count_total_processed_rows(ss) }.inject(0, :+)
 			end
 
 			def processed_rows(query_id)
