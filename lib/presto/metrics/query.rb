@@ -14,7 +14,7 @@ module Presto
   			@client = client
   		end
 
-  		def format_table(tbl, label, align, sep:' ')
+  		def format_table(tbl, label, align, sep)
   			# Compute col length
   			col = {}
   			label.each_with_index{|l, i| col[i] = l.length}
@@ -62,7 +62,8 @@ module Presto
 	  		format_table(
 	  			tbl, 
 	  			:label => %w|query time state r f t user catalog schema source sql|,
-	  			:align => %w|r     r    r     r r r l    l       r      l      l  |
+	  			:align => %w|r     r    r     r r r l    l       r      l      l  |,
+					:sep => ' '
 	  		)
 	  	end
 
@@ -87,7 +88,8 @@ module Presto
         }
         format_table(stats,
                      :label => %w|task_id host    state processed_rows size|,
-                     :align => %w|l       l       l     r          r|
+                     :align => %w|l       l       l     r          r|,
+										 :sep => ' '
         )
       end
 
