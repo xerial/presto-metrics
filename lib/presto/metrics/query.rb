@@ -14,7 +14,7 @@ module Presto
   			@client = client
   		end
 
-  		def format_table(tbl, label:[], align:[], sep:' ')
+  		def format_table(tbl, label, align, sep:' ')
   			# Compute col length
   			col = {}
   			label.each_with_index{|l, i| col[i] = l.length}
