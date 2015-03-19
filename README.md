@@ -67,6 +67,30 @@ client.node_scheduler_metrics    # com.facebook.presto.execution:name=NodeSchedu
 client.task_executor_metrics     # com.facebook.presto.execution:name=TaskExecutor
 client.task_manager_metrics      # com.facebook.presto.execution:name=TaskManager
 
+# Retrieve presto worker metrics
+pp client.node_metrics
+[{"host"=>"xxx.xxx.xxx.xxx",
+  "uri"=>"http://xxx.xxx.xxx.xxx:8080",
+  "recent_requests"=>120.00277776491774,
+  "recent_failures"=>0.0,
+  "recent_successes"=>120.0027781973587,
+  "last_request_time"=>"2015-03-19T03:27:23.242Z",
+  "last_response_time"=>"2015-03-19T03:27:23.243Z",
+  "recent_failure_ratio"=>0.0,
+  "age"=>"38.56m",
+  "recent_failures_by_type"=>{}},
+ {"host"=>"yyy.yyy.yyy.yyy",
+  "uri"=>"http://yyy.yyy.yyy.yyy:8080",
+  "recent_requests"=>120.00277776491774,
+  "recent_failures"=>0.0,
+  "recent_successes"=>120.0027777649236,
+  "last_request_time"=>"2015-03-19T03:27:23.242Z",
+  "last_response_time"=>"2015-03-19T03:27:23.243Z",
+  "recent_failure_ratio"=>0.0,
+  "age"=>"38.56m",
+  "recent_failures_by_type"=>{}}]
+
+
 # Retrieve the JSON representation of JMX properties
 client.get_json("java.lang:Type=Memory")
 

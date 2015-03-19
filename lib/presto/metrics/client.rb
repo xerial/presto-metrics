@@ -13,6 +13,7 @@ module Presto
         @endpoint = opts[:endpoint] || "http://#{@host}:#{@port}"
         @mbean_path = opts[:mbean_path] || '/v1/jmx/mbean'
         @query_path = opts[:query_path] || '/v1/query'
+        @node_path = opts[:node_path] || '/v1/node'
         @caml_case = opts[:caml_case] || false
       end
 
@@ -84,6 +85,10 @@ module Presto
 
       def get_query_json(path='', default='[]')
         get("#{@query_path}/#{path}", default)
+      end
+
+      def get_node_json
+        get(@node_path)
       end
 
       def get_attributes(mbean)
@@ -161,6 +166,21 @@ module Presto
 
       def task_manager_metrics(target_attr=[])
         get_metrics('com.facebook.presto.execution:name=TaskManager', target_attr)
+      end
+
+      def node_metrics(target_attr=[])
+        p = URI::Parser.new
+        node_state = JSON.parse(get_node_json)
+        node_state.map{|n|
+          uri = n['uri'] || ''
+          m = {}
+          m['host'] = p.parse(uri).host
+          n.each{|k, v|
+            key = @caml_case ? k : underscore(k)
+            m[key] = v
+          }
+          m
+        }
       end
 
       private :map_to_canonical_name, :to_canonical_name, :underscore
