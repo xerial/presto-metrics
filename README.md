@@ -61,6 +61,7 @@ client.memory_usage_metrics      # java.lang:Type=Memory
 client.os_metrics                # java.lang:type=OperatingSystm
 client.gc_cms_metrics            # java.lang:type=GarbageCollector,name=ConcurrentMarkSweep
 client.gc_parnew_metrics         # java.lang:type=GarbageCollector,name=ParNew
+client.gc_g1_metrics             # java.lang:type=GarbageCollector,name=G1
 client.query_manager_metrics     # com.facebook.presto.execution:name=QueryManager
 client.query_execution_metrics   # com.facebook.presto.execution:name=QueryExecution
 client.node_scheduler_metrics    # com.facebook.presto.execution:name=NodeScheduler

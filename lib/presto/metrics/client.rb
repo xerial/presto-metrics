@@ -144,6 +144,10 @@ module Presto
         get_metrics('java.lang:type=GarbageCollector,name=ParNew', target_attr)
       end
 
+      def gc_g1_metrics(target_attr=[])
+        get_metrics('java.lang:type=GarbageCollector,name=G1', target_attr)
+      end
+
       def os_metrics(target_attr=[])
         get_metrics('java.lang:type=OperatingSystem', target_attr)
       end
