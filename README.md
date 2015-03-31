@@ -93,7 +93,7 @@ pp client.node_metrics
 
 
 # Retrieve the JSON representation of JMX properties
-client.get_json("java.lang:Type=Memory")
+client.get_mbean_json("java.lang:Type=Memory")
 
 # Pretty print 
 require 'pp'
