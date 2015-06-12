@@ -100,6 +100,107 @@ pp client.node_metrics
   "age"=>"38.56m",
   "recent_failures_by_type"=>{}}]
 
+# Garbage Collection metrics
+pp client.gc_g1_metrics
+{"g1_old_generation"=>
+  {"last_gc_info"=>
+    {"gc_thread_count"=>28,
+     "duration"=>478,
+     "end_time"=>9530,
+     "id"=>3,
+     "memory_usage_after_gc"=>
+      {"g1_survivor_space"=>{"committed"=>0, "init"=>0, "max"=>-1, "used"=>0},
+       "metaspace"=>
+        {"committed"=>60444672, "init"=>0, "max"=>-1, "used"=>56490104},
+       "g1_old_gen"=>
+        {"committed"=>134217728,
+         "init"=>1895825408,
+         "max"=>103079215104,
+         "used"=>75768752},
+       "g1_eden_space"=>
+        {"committed"=>134217728, "init"=>117440512, "max"=>-1, "used"=>0},
+       "code_cache"=>
+        {"committed"=>28114944,
+         "init"=>2555904,
+         "max"=>314572800,
+         "used"=>27676416}},
+     "memory_usage_before_gc"=>
+      {"g1_survivor_space"=>
+        {"committed"=>33554432, "init"=>0, "max"=>-1, "used"=>33554432},
+       "metaspace"=>
+        {"committed"=>60444672, "init"=>0, "max"=>-1, "used"=>56829560},
+       "g1_old_gen"=>
+        {"committed"=>234881024,
+         "init"=>1895825408,
+         "max"=>103079215104,
+         "used"=>10082520},
+       "g1_eden_space"=>
+        {"committed"=>402653184,
+         "init"=>117440512,
+         "max"=>-1,
+         "used"=>318767104},
+       "code_cache"=>
+        {"committed"=>28114944,
+         "init"=>2555904,
+         "max"=>314572800,
+         "used"=>27676416}},
+     "start_time"=>9052},
+   "collection_count"=>3,
+   "collection_time"=>1624,
+   "memory_pool_names"=>["G1 Eden Space", "G1 Survivor Space", "G1 Old Gen"],
+   "valid"=>true,
+   "name"=>"G1 Old Generation",
+   "object_name"=>"java.lang:type=GarbageCollector,name=G1 Old Generation"},
+ "g1_young_generation"=>
+  {"last_gc_info"=>
+    {"gc_thread_count"=>28,
+     "duration"=>26,
+     "end_time"=>7034504,
+     "id"=>145,
+     "memory_usage_after_gc"=>
+      {"g1_survivor_space"=>
+        {"committed"=>100663296, "init"=>0, "max"=>-1, "used"=>100663296},
+       "metaspace"=>
+        {"committed"=>73138176, "init"=>0, "max"=>-1, "used"=>67016896},
+       "g1_old_gen"=>
+        {"committed"=>5989466112,
+         "init"=>1895825408,
+         "max"=>103079215104,
+         "used"=>3212283664},
+       "g1_eden_space"=>
+        {"committed"=>9512681472, "init"=>117440512, "max"=>-1, "used"=>0},
+       "code_cache"=>
+        {"committed"=>63045632,
+         "init"=>2555904,
+         "max"=>314572800,
+         "used"=>62560832}},
+     "memory_usage_before_gc"=>
+      {"g1_survivor_space"=>
+        {"committed"=>83886080, "init"=>0, "max"=>-1, "used"=>83886080},
+       "metaspace"=>
+        {"committed"=>73138176, "init"=>0, "max"=>-1, "used"=>67016896},
+       "g1_old_gen"=>
+        {"committed"=>5771362304,
+         "init"=>1895825408,
+         "max"=>103079215104,
+         "used"=>3206420472},
+       "g1_eden_space"=>
+        {"committed"=>9747562496,
+         "init"=>117440512,
+         "max"=>-1,
+         "used"=>9277800448},
+       "code_cache"=>
+        {"committed"=>63045632,
+         "init"=>2555904,
+         "max"=>314572800,
+         "used"=>62560832}},
+     "start_time"=>7034478},
+   "collection_count"=>145,
+   "collection_time"=>8946,
+   "memory_pool_names"=>["G1 Eden Space", "G1 Survivor Space"],
+   "valid"=>true,
+   "name"=>"G1 Young Generation",
+   "object_name"=>"java.lang:type=GarbageCollector,name=G1 Young Generation"}}
 
 # Retrieve the JSON representation of JMX properties
 client.get_mbean_json("java.lang:Type=Memory")
