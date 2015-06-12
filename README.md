@@ -68,6 +68,19 @@ client.node_scheduler_metrics    # com.facebook.presto.execution:name=NodeSchedu
 client.task_executor_metrics     # com.facebook.presto.execution:name=TaskExecutor
 client.task_manager_metrics      # com.facebook.presto.execution:name=TaskManager
 
+
+
+```ruby
+# Memory resource manager metrics
+client.memory_pool_metrics()
+=> {"general"=>{"free_bytes"=>59700045415, "max_bytes"=>59700045415}, "reserved"=>{"free_bytes"=>2147483648, "max_bytes"=>2147483648}}
+
+client.cluster_memory_pool_metrics()
+=> {"general"=>{"blocked_nodes"=>0, "free_distributed_bytes"=>116833832981, "nodes"=>4, "queries"=>8, "total_distributed_bytes"=>131855495989},
+    "reserved"=>{"blocked_nodes"=>0, "free_distributed_bytes"=>15032385536, "nodes"=>4, "queries"=>0, "total_distributed_bytes"=>15032385536}}
+```
+
+
 # Retrieve presto worker metrics
 pp client.node_metrics
 [{"host"=>"xxx.xxx.xxx.xxx",
@@ -125,3 +138,19 @@ pp c.memory_usage_metrics
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
+
+
+## For developers
+
+To develop presto-metrics
+
+```
+$ bundle exec irb -I lib -r presto/metrics.rb
+
+irb> client = Presto::Metrics::Client.new(:host => "ec2-54-205-192-36.compute-1.amazonaws.com", :port=>8080)
+
+# reload modified code
+irb> load "presto/metrics/client.rb"
+
+```
+
