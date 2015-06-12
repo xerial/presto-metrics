@@ -66,7 +66,7 @@ client.query_execution_metrics   # com.facebook.presto.execution:name=QueryExecu
 client.node_scheduler_metrics    # com.facebook.presto.execution:name=NodeScheduler
 client.task_executor_metrics     # com.facebook.presto.execution:name=TaskExecutor
 client.task_manager_metrics      # com.facebook.presto.execution:name=TaskManager
-
+client.cluster_memory_manager_metrics # com.facebook.presto.memory:name=ClusterMemoryManager
 
 # Memory resource manager metrics (since Presto 0.103)
 client.memory_pool_metrics
