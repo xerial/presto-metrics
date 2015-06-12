@@ -32,7 +32,6 @@ client = Presto::Metrics::Client.new  # Access to http://localhost:8080 in defau
 client = Presto::Metrics::Client.new(:host => "localhost", :port=>8080) 
 
 
-
 client.os_metrics
 # => {:open_file_descriptor_count=>360, :max_file_descriptor_count=>10240, :committed_virtual_memory_size=>18683629568, :total_swap_space_size=>2147483648, :free_swap_space_size=>1132986368, :process_cpu_time=>240244441000, :free_physical_memory_size=>2088931328, :total_physical_memory_size=>17179869184, :system_cpu_load=>0.044989775051124746, :process_cpu_load=>0.002293214043176635, :name=>"Mac OS X", :version=>"10.9.4", :available_processors=>8, :arch=>"x86_64", :system_load_average=>2.0537109375, :object_name=>"java.lang:type=OperatingSystem"}
 
@@ -61,7 +60,7 @@ client.memory_usage_metrics      # java.lang:Type=Memory
 client.os_metrics                # java.lang:type=OperatingSystm
 client.gc_cms_metrics            # java.lang:type=GarbageCollector,name=ConcurrentMarkSweep
 client.gc_parnew_metrics         # java.lang:type=GarbageCollector,name=ParNew
-client.gc_g1_metrics             # java.lang:type=GarbageCollector,name=G1
+client.gc_g1_metrics             # java.lang:type=GarbageCollector,name=G1 Young Generation and G1 Old Genration
 client.query_manager_metrics     # com.facebook.presto.execution:name=QueryManager
 client.query_execution_metrics   # com.facebook.presto.execution:name=QueryExecution
 client.node_scheduler_metrics    # com.facebook.presto.execution:name=NodeScheduler
@@ -69,13 +68,12 @@ client.task_executor_metrics     # com.facebook.presto.execution:name=TaskExecut
 client.task_manager_metrics      # com.facebook.presto.execution:name=TaskManager
 
 
-
+# Memory resource manager metrics (since Presto 0.103)
 ```ruby
-# Memory resource manager metrics
-client.memory_pool_metrics()
+client.memory_pool_metrics
 => {"general"=>{"free_bytes"=>59700045415, "max_bytes"=>59700045415}, "reserved"=>{"free_bytes"=>2147483648, "max_bytes"=>2147483648}}
 
-client.cluster_memory_pool_metrics()
+client.cluster_memory_pool_metrics
 => {"general"=>{"blocked_nodes"=>0, "free_distributed_bytes"=>116833832981, "nodes"=>4, "queries"=>8, "total_distributed_bytes"=>131855495989},
     "reserved"=>{"blocked_nodes"=>0, "free_distributed_bytes"=>15032385536, "nodes"=>4, "queries"=>0, "total_distributed_bytes"=>15032385536}}
 ```

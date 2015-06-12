@@ -7,6 +7,7 @@ module Presto
         require 'json'
         require 'set'
         require 'time'
+        require 'uri'
 
         @host = opts[:host] || 'localhost'
         @port = opts[:port] || '8080'
@@ -76,7 +77,7 @@ module Presto
       end
 
       def get(path, default='{}')
-        resp = HTTParty.get("#{@endpoint}#{path}")
+        resp = HTTParty.get(URI.encode("#{@endpoint}#{path}"))
         if resp.code == 200
           resp.body
         else
@@ -117,6 +118,7 @@ module Presto
         str.gsub(/::/, '/').
             gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2').
             gsub(/([a-z\d])([A-Z])/, '\1_\2').
+            gsub(/ +/,'_').
             tr('-', '_').
             downcase
       end
@@ -137,20 +139,55 @@ module Presto
         kv
       end
 
+      def sanitize_key(k)
+        @caml_case ? k : underscore(k)
+      end
+
+      def extract_value(v)
+        if v.is_a?(Hash)
+          if v.has_key?('key') && v.has_key?('value')
+            {sanitize_key(v['key']) => extract_value(v['value']) }
+          else
+            v.each_with_object({}) {|(k1, v1), h2|
+              h2[sanitize_key(k1)] = extract_value(v1)
+            }
+          end
+        elsif v.is_a?(Array) && v.all?{|e| e.is_a?(Hash) }
+          v.each_with_object({}){|e, h| h.merge!(extract_value(e)) }
+        else
+          v
+        end
+      end
+
+      def get_gc_metrics(mbean, target_attr=[])
+        h = {}
+        get_attributes(mbean)
+            .reject { |attr| attr['name'].nil? || attr['value'].nil? }
+            .each { |attr|
+          key = sanitize_key(attr['name'])
+          v = attr['value']
+          h[key] = extract_value(v)
+        }
+        h
+      end
+
+
       def memory_usage_metrics(target_attr=[])
         get_metrics('java.lang:type=Memory', target_attr)
       end
 
       def gc_cms_metrics(target_attr=[])
-        get_metrics('java.lang:type=GarbageCollector,name=ConcurrentMarkSweep', target_attr)
+        get_gc_metrics('java.lang:type=GarbageCollector,name=ConcurrentMarkSweep', target_attr)
       end
 
       def gc_parnew_metrics(target_attr=[])
-        get_metrics('java.lang:type=GarbageCollector,name=ParNew', target_attr)
+        get_gc_metrics('java.lang:type=GarbageCollector,name=ParNew', target_attr)
       end
 
       def gc_g1_metrics(target_attr=[])
-        get_metrics('java.lang:type=GarbageCollector,name=G1', target_attr)
+        ['G1 Old Generation', 'G1 Young Generation'].each_with_object({}){|gen, h|
+          h[sanitize_key(gen)] = get_gc_metrics("java.lang:type=GarbageCollector,name=#{gen}", target_attr)
+        }
       end
 
       def os_metrics(target_attr=[])
@@ -192,6 +229,7 @@ module Presto
       def cluster_memory_manager_metrics(target_attr=[])
         get_metrics("com.facebook.presto.memory:name=ClusterMemoryManager", target_attr)
       end
+
 
       def node_metrics(target_attr=[])
         p = URI::Parser.new
