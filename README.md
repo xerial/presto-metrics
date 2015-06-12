@@ -69,14 +69,12 @@ client.task_manager_metrics      # com.facebook.presto.execution:name=TaskManage
 
 
 # Memory resource manager metrics (since Presto 0.103)
-```ruby
 client.memory_pool_metrics
 => {"general"=>{"free_bytes"=>59700045415, "max_bytes"=>59700045415}, "reserved"=>{"free_bytes"=>2147483648, "max_bytes"=>2147483648}}
 
 client.cluster_memory_pool_metrics
 => {"general"=>{"blocked_nodes"=>0, "free_distributed_bytes"=>116833832981, "nodes"=>4, "queries"=>8, "total_distributed_bytes"=>131855495989},
     "reserved"=>{"blocked_nodes"=>0, "free_distributed_bytes"=>15032385536, "nodes"=>4, "queries"=>0, "total_distributed_bytes"=>15032385536}}
-```
 
 
 # Retrieve presto worker metrics
