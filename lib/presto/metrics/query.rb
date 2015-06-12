@@ -59,11 +59,10 @@ module Presto
 	  			[q['queryId'], q['elapsedTime'], q['state'], q['runningDrivers'], q['completedDrivers'], q['totalDrivers'], s['user'], s['catalog'], s['schema'], s['source'], query]
 	  		}.sort_by{|row| row[0]}.reverse
 
-	  		format_table(
-	  			tbl, 
-	  			:label => %w|query time state r f t user catalog schema source sql|,
-	  			:align => %w|r     r    r     r r r l    l       r      l      l  |,
-					:sep => ' '
+				format_table(tbl,
+						%w|query time state r f t user catalog schema source sql|,
+						%w|r     r    r     r r r l    l       r      l      l  |,
+						' '
 	  		)
 	  	end
 
@@ -73,9 +72,9 @@ module Presto
 
 	  	def task_list(queryId)
 	  		qj = find(queryId) || {}
-        root_stage = qj['outputStage'] || []
+        root_stage = qj['outputStage'] || {}
         tasks = root_stage['tasks'] || []
-        tasks << find_tasks(root_stage['subStages'])
+        tasks << find_tasks(root_stage['subStages'] || [])
         tasks.flatten
       end
 
@@ -87,9 +86,9 @@ module Presto
           [t['taskId'], host, t['state'], s['rawInputPositions'], s['rawInputDataSize'], s['queuedDrivers'], s['runningDrivers'], s['completedDrivers']]
         }
         format_table(stats,
-                     :label => %w|task_id host    state processed_rows size|,
-                     :align => %w|l       l       l     r          r|,
-										 :sep => ' '
+                     %w|task_id host    state processed_rows size|,
+                     %w|l       l       l     r          r|,
+										 ' '
         )
       end
 
