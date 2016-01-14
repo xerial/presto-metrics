@@ -67,7 +67,11 @@ module Presto
       end
 
       def find(queryId)
-        JSON.parse(@client.get_query_json(queryId, "{}"))
+        begin
+          JSON.parse(@client.get_query_json(queryId, "{}"))
+        rescue
+          {}
+        end
       end
 
       def task_list(queryId)
@@ -93,7 +97,11 @@ module Presto
       end
 
       def query_list(path="")
-        JSON.parse(@client.get_query_json(path))
+        begin
+          JSON.parse(@client.get_query_json(path))
+        rescue
+          []
+        end
       end
 
       def running_list
@@ -118,8 +126,7 @@ module Presto
       def query_progress
         running_queries = query_list.map { |q| QueryInfo.decode(q) }.select { |q| q.state == :running }
         query_info = running_queries.map { |q|
-          queryInfo = find(q.query_id)
-          QueryInfo.decode(queryInfo)
+          QueryInfo.decode(find(q.query_id))
         }
 
         result = {}
