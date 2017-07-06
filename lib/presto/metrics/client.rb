@@ -25,8 +25,9 @@ module Presto
           'os' => 'java.lang:type=OperatingSystem',
           'query_manager' => 'com.facebook.presto.execution:name=QueryManager',
           'query_execution' => 'com.facebook.presto.execution:name=QueryExecution',
-          'node_scheduler' => 'com.facebook.presto.execution:name=NodeScheduler',
-          'task_executor' => 'com.facebook.presto.execution:name=TaskExecutor',
+          'node_scheduler' => 'com.facebook.presto.execution.scheduler:name=NodeScheduler', # deprecated?
+          'split_scheduler_stats' => 'com.facebook.presto.execution.scheduler:name=SplitSchedulerStats',
+          'task_executor' => 'com.facebook.presto.execution.executor:name=TaskExecutor',
           'task_manager' => 'com.facebook.presto.execution:name=TaskManager',
           'memory_pool_general' => 'com.facebook.presto.memory:type=MemoryPool,name=general',
           'memory_pool_reserved' => 'com.facebook.presto.memory:type=MemoryPool,name=reserved',
@@ -35,6 +36,8 @@ module Presto
           'cluster_memory_pool_general' => 'com.facebook.presto.memory:type=ClusterMemoryPool,name=general',
           'cluster_memory_pool_reserved' => 'com.facebook.presto.memory:type=ClusterMemoryPool,name=reserved',
           'cluster_memory_pool_system' => 'com.facebook.presto.memory:type=ClusterMemoryPool,name=system',
+          'discovery_node_manager' => 'com.facebook.presto.metadata:name=DiscoveryNodeManager',
+          'pause_meter' => 'io.airlift.stats:name=PauseMeter',
       }
 
       def path(path)
