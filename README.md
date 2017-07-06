@@ -251,3 +251,10 @@ irb> load "presto/metrics/client.rb"
 
 ```
 
+
+### Releasing a new version
+```
+# Update version in lib/presto/metrics/version.rb
+# Publish to RubyGem
+$ bundle exec rake release
+```
