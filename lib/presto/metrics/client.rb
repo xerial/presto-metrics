@@ -25,7 +25,6 @@ module Presto
           'os' => 'java.lang:type=OperatingSystem',
           'query_manager' => 'presto.execution:name=QueryManager',
           'query_execution' => 'presto.execution:name=QueryExecution',
-          'node_scheduler' => 'presto.execution.scheduler:name=NodeScheduler', # deprecated?
           'split_scheduler_stats' => 'presto.execution.scheduler:name=SplitSchedulerStats',
           'task_executor' => 'presto.execution.executor:name=TaskExecutor',
           'task_manager' => 'presto.execution:name=TaskManager',
