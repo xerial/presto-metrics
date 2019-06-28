@@ -23,20 +23,17 @@ module Presto
           'gc_cms' => 'java.lang:type=GarbageCollector,name=ConcurrentMarkSweep',
           'gc_parnew' => 'java.lang:type=GarbageCollector,name=ParNew',
           'os' => 'java.lang:type=OperatingSystem',
-          'query_manager' => 'com.facebook.presto.execution:name=QueryManager',
-          'query_execution' => 'com.facebook.presto.execution:name=QueryExecution',
-          'node_scheduler' => 'com.facebook.presto.execution.scheduler:name=NodeScheduler', # deprecated?
-          'split_scheduler_stats' => 'com.facebook.presto.execution.scheduler:name=SplitSchedulerStats',
-          'task_executor' => 'com.facebook.presto.execution.executor:name=TaskExecutor',
-          'task_manager' => 'com.facebook.presto.execution:name=TaskManager',
-          'memory_pool_general' => 'com.facebook.presto.memory:type=MemoryPool,name=general',
-          'memory_pool_reserved' => 'com.facebook.presto.memory:type=MemoryPool,name=reserved',
-          'memory_pool_system' => 'com.facebook.presto.memory:type=MemoryPool,name=system',
-          'cluster_memory_manager' => 'com.facebook.presto.memory:name=ClusterMemoryManager',
-          'cluster_memory_pool_general' => 'com.facebook.presto.memory:type=ClusterMemoryPool,name=general',
-          'cluster_memory_pool_reserved' => 'com.facebook.presto.memory:type=ClusterMemoryPool,name=reserved',
-          'cluster_memory_pool_system' => 'com.facebook.presto.memory:type=ClusterMemoryPool,name=system',
-          'discovery_node_manager' => 'com.facebook.presto.metadata:name=DiscoveryNodeManager',
+          'query_manager' => 'presto.execution:name=QueryManager',
+          'query_execution' => 'presto.execution:name=QueryExecution',
+          'split_scheduler_stats' => 'presto.execution.scheduler:name=SplitSchedulerStats',
+          'task_executor' => 'presto.execution.executor:name=TaskExecutor',
+          'task_manager' => 'presto.execution:name=TaskManager',
+          'memory_pool_general' => 'presto.memory:type=MemoryPool,name=general',
+          'memory_pool_reserved' => 'presto.memory:type=MemoryPool,name=reserved',
+          'cluster_memory_manager' => 'presto.memory:name=ClusterMemoryManager',
+          'cluster_memory_pool_general' => 'presto.memory:type=ClusterMemoryPool,name=general',
+          'cluster_memory_pool_reserved' => 'presto.memory:type=ClusterMemoryPool,name=reserved',
+          'discovery_node_manager' => 'presto.metadata:name=DiscoveryNodeManager',
           'pause_meter' => 'io.airlift.stats:name=PauseMeter',
       }
 
@@ -200,39 +197,39 @@ module Presto
       end
 
       def query_manager_metrics(target_attr=[])
-        get_metrics('com.facebook.presto.execution:name=QueryManager', target_attr)
+        get_metrics('presto.execution:name=QueryManager', target_attr)
       end
 
       def query_execution_metrics(target_attr=[])
-        get_metrics('com.facebook.presto.execution:name=QueryExecution', target_attr)
+        get_metrics('presto.execution:name=QueryExecution', target_attr)
       end
 
       def node_scheduler_metrics(target_attr=[])
-        get_metrics('com.facebook.presto.execution:name=NodeScheduler', target_attr)
+        get_metrics('presto.execution:name=NodeScheduler', target_attr)
       end
 
       def task_executor_metrics(target_attr=[])
-        get_metrics('com.facebook.presto.execution:name=TaskExecutor', target_attr)
+        get_metrics('presto.execution:name=TaskExecutor', target_attr)
       end
 
       def task_manager_metrics(target_attr=[])
-        get_metrics('com.facebook.presto.execution:name=TaskManager', target_attr)
+        get_metrics('presto.execution:name=TaskManager', target_attr)
       end
 
       def memory_pool_metrics(target_attr=[])
-        ['general', 'reserved', 'system'].each_with_object({}) {|type, hash|
-          hash[type] = get_metrics("com.facebook.presto.memory:type=MemoryPool,name=#{type}", target_attr)
+        ['general', 'reserved'].each_with_object({}) {|type, hash|
+          hash[type] = get_metrics("presto.memory:type=MemoryPool,name=#{type}", target_attr)
         }
       end
 
       def cluster_memory_pool_metrics(target_attr=[])
-        ['general', 'reserved', 'system'].each_with_object({}) {|type, hash|
-          hash[type] = get_metrics("com.facebook.presto.memory:type=ClusterMemoryPool,name=#{type}", target_attr)
+        ['general', 'reserved'].each_with_object({}) {|type, hash|
+          hash[type] = get_metrics("presto.memory:type=ClusterMemoryPool,name=#{type}", target_attr)
         }
       end
 
       def cluster_memory_manager_metrics(target_attr=[])
-        get_metrics("com.facebook.presto.memory:name=ClusterMemoryManager", target_attr)
+        get_metrics("presto.memory:name=ClusterMemoryManager", target_attr)
       end
 
 
