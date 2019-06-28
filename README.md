@@ -61,12 +61,12 @@ client.os_metrics                # java.lang:type=OperatingSystm
 client.gc_cms_metrics            # java.lang:type=GarbageCollector,name=ConcurrentMarkSweep
 client.gc_parnew_metrics         # java.lang:type=GarbageCollector,name=ParNew
 client.gc_g1_metrics             # java.lang:type=GarbageCollector,name=G1 Young Generation and G1 Old Genration
-client.query_manager_metrics     # com.facebook.presto.execution:name=QueryManager
-client.query_execution_metrics   # com.facebook.presto.execution:name=QueryExecution
-client.node_scheduler_metrics    # com.facebook.presto.execution:name=NodeScheduler
-client.task_executor_metrics     # com.facebook.presto.execution:name=TaskExecutor
-client.task_manager_metrics      # com.facebook.presto.execution:name=TaskManager
-client.cluster_memory_manager_metrics # com.facebook.presto.memory:name=ClusterMemoryManager
+client.query_manager_metrics     # presto.execution:name=QueryManager
+client.query_execution_metrics   # presto.execution:name=QueryExecution
+client.node_scheduler_metrics    # presto.execution:name=NodeScheduler
+client.task_executor_metrics     # presto.execution:name=TaskExecutor
+client.task_manager_metrics      # presto.execution:name=TaskManager
+client.cluster_memory_manager_metrics # presto.memory:name=ClusterMemoryManager
 
 # Memory resource manager metrics (since Presto 0.103)
 client.memory_pool_metrics
