@@ -1,5 +1,5 @@
 module Presto
   module Metrics
-    VERSION = '0.3.12'
+    VERSION = '0.4.0'
   end
 end
