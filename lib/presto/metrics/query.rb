@@ -144,15 +144,16 @@ module Presto
           h['query_id'] = qi['queryId'] || ''
           h['state'] = qi['state'] || ''
           session = qi['session'] || {}
+          stats = qi['queryStats'] || {}
           h['source'] = session['source'] || ''
           h['user'] = session['user'] || h['source'].gsub(/[^a-zA-Z0-9]/, '')
-          h['running_drivers'] = qi['runningDrivers'] || 0
-          h['queued_drivers'] = qi['queuedDrivers'] || 0
-          h['completed_drivers'] = qi['completedDrivers'] || 0
-          h['total_drivers'] = qi['totalDrivers'] || 0
-          h['elapsed_time'] = qi['elapsedTime'] || '0.0m'
-          h['create_time'] = qi['createTime']
-          h['running_time'] = qi['endTime'] || Time.now.utc.iso8601(3)
+          h['running_drivers'] = stats['runningDrivers'] || 0
+          h['queued_drivers'] = stats['queuedDrivers'] || 0
+          h['completed_drivers'] = stats['completedDrivers'] || 0
+          h['total_drivers'] = stats['totalDrivers'] || 0
+          h['elapsed_time'] = stats['elapsedTime'] || '0.0m'
+          h['create_time'] = stats['createTime']
+          h['running_time'] = stats['endTime'] || Time.now.utc.iso8601(3) # end_time ?
           #if(h['state'] == "FAILED")
           #	h['errorCode'] = find(h['query_id'])['errorCode'] || {}
           #end
