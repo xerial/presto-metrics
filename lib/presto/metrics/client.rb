@@ -16,6 +16,7 @@ module Presto
         @query_path = opts[:query_path] || '/v1/query'
         @node_path = opts[:node_path] || '/v1/node'
         @caml_case = opts[:caml_case] || false
+        @headers = opts[:headers] || {}
       end
 
       @@MBEAN_ALIAS = {
@@ -79,7 +80,7 @@ module Presto
       end
 
       def get(path, default='{}')
-        resp = HTTParty.get(URI.encode("#{@endpoint}#{path}"))
+        resp = HTTParty.get(URI.encode("#{@endpoint}#{path}"), headers: @headers)
         if resp.code == 200
           resp.body
         else
