@@ -1,0 +1,29 @@
+---
+name: unit tests
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        ruby-version: ["2.6", "2.7"]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Ruby ${{ matrix.ruby-version }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+      - name: Install gem packages
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3
+          bundle exec gem dependency -R
+
+      - name: test with Rake
+        run: |
+          bundle exec rake spec
