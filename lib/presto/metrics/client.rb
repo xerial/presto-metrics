@@ -80,7 +80,8 @@ module Presto
       end
 
       def get(path, default='{}')
-        resp = HTTParty.get(URI.encode("#{@endpoint}#{path}"), headers: @headers)
+        parser = URI::Parser.new
+        resp = HTTParty.get(parser.escape("#{@endpoint}#{path}"), headers: @headers)
         if resp.code == 200
           resp.body
         else
@@ -253,4 +254,3 @@ module Presto
     end
   end
 end
-
