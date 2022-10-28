@@ -43,7 +43,4 @@ autolabeler:
   - label: 'deprecation'
     title:
       - '/deprecate/i'
-
-replacers:
-  - search: '/(QUERY|MPP|PTD|PLT|BE|SECU|API|INIT)-(\d+)/g'
-    replace: '[$1-$2](https://treasure-data.atlassian.net/browse/$1-$2)'
+   
