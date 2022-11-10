@@ -24,6 +24,10 @@ jobs:
           bundle install --jobs 4 --retry 3
           bundle exec gem dependency -R
 
+      - name: Check coding style
+        run: |
+          bundle exec standardrb
+
       - name: test with Rake
         run: |
           bundle exec rake spec

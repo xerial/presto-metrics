@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "presto-client", '~> 0.5.6'
   spec.add_development_dependency "httpclient"
+  spec.add_development_dependency "standard", ["~> 1.16.0"]
 
   spec.add_runtime_dependency "httparty"
 

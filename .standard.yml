@@ -1,0 +1,8 @@
+---
+fix: false
+format: progress # default: Standard::Formatter
+default_ignores: false # default: true
+
+ignore:
+  - "Rakefile"
+  - "presto-metrics.gemspec"
