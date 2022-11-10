@@ -8,7 +8,6 @@ include Presto::Client::Models
 
 module Presto
   module Metrics
-
     class Query
       def initialize(client)
         @client = client
@@ -38,12 +37,12 @@ module Presto
             str = cell.to_s[0..col[i]]
             a = align[i] || 'l'
             case a
-              when 'r'
-                line << str.rjust(col[i])
-              when 'l'
-                line << str.ljust(col[i])
-              else
-                line << str.ljust(col[i])
+            when 'r'
+              line << str.rjust(col[i])
+            when 'l'
+              line << str.ljust(col[i])
+            else
+              line << str.ljust(col[i])
             end
           }
           puts line.join(sep)
@@ -62,8 +61,7 @@ module Presto
         format_table(tbl,
             %w|query time state r f t user catalog schema source sql|,
             %w|r     r    r     r r r l    l       r      l      l  |,
-            ' '
-        )
+            ' ')
       end
 
       def find(queryId)
@@ -92,11 +90,10 @@ module Presto
         format_table(stats,
             %w|task_id host    state processed_rows size|,
             %w|l       l       l     r          r|,
-            ' '
-        )
+            ' ')
       end
 
-      def query_list(path="")
+      def query_list(path = "")
         begin
           JSON.parse(@client.get_query_json(path))
         rescue
@@ -154,9 +151,9 @@ module Presto
           h['elapsed_time'] = stats['elapsedTime'] || '0.0m'
           h['create_time'] = stats['createTime']
           h['running_time'] = stats['endTime'] || Time.now.utc.iso8601(3) # end_time ?
-          #if(h['state'] == "FAILED")
+          # if(h['state'] == "FAILED")
           #	h['errorCode'] = find(h['query_id'])['errorCode'] || {}
-          #end
+          # end
           h
         }
       end
@@ -169,9 +166,8 @@ module Presto
           task_list << tl if tl
           task_list << find_tasks(ss['subStages'])
         }
-        task_list.flatten()
+        task_list.flatten
       end
-
     end
   end
 end
