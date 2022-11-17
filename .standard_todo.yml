@@ -1,0 +1,25 @@
+---
+ignore:
+  - lib/presto/metrics/client.rb:
+      - Naming/VariableName
+      - Performance/RedundantSplitRegexpArgument
+      - Performance/StringReplacement
+      - Performance/UriDefaultParser
+      - Style/ClassCheck
+      - Style/ConditionalAssignment
+      - Style/EmptyLiteral
+      - Style/IfInsideElse
+      - Style/PercentLiteralDelimiters  # Keep
+      - Style/RedundantBegin
+      - Style/StringLiterals
+      - Style/TrailingCommaInHashLiteral  # Keep
+  - lib/presto/metrics/query.rb:
+      - Layout/ArgumentAlignment
+      - Layout/SpaceInsideArrayPercentLiteral  # Keep
+      - Layout/SpaceInsidePercentLiteralDelimiters  # Keep
+      - Naming/VariableName
+      - Style/ConditionalAssignment
+      - Style/MixinUsage
+      - Style/PercentLiteralDelimiters  # Keep
+      - Style/RedundantBegin
+      - Style/StringLiterals
