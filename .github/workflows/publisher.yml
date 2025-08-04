@@ -1,5 +1,6 @@
 ---
 name: Publish to RubyGems
+
 on:
   push:
     tags:
@@ -22,8 +23,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          bundler-cache: true
-          ruby-version: ruby
+          ruby-version: 3.2
 
       # Release
       - uses: rubygems/release-gem@v1
