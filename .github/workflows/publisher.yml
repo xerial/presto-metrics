@@ -1,0 +1,29 @@
+---
+name: Publish to RubyGems
+on:
+  push:
+    tags:
+      - v*
+
+permissions:
+  id-token: write
+  contents: write
+
+# see: https://guides.rubygems.org/trusted-publishing/adding-a-publisher/
+jobs:
+  push:
+    name: Push gem to RubyGems.org
+    runs-on: ubuntu-latest
+    steps:
+      # Set up
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          ruby-version: ruby
+
+      # Release
+      - uses: rubygems/release-gem@v1
