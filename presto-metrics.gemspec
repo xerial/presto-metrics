@@ -18,12 +18,18 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
+  spec.required_ruby_version = ">= 3.2.0"
+
   spec.add_development_dependency "bundler", "~> 2.0"
-  spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "rake", "~> 13.0"
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "presto-client", '~> 0.5.6'
   spec.add_development_dependency "httpclient"
   spec.add_development_dependency "standard", ["~> 1.16.0"]
+
+  if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("3.4")
+    spec.add_dependency("base64")
+  end
 
   spec.add_runtime_dependency "httparty"
 
