@@ -2,12 +2,14 @@ PATH
   remote: .
   specs:
     presto-metrics (0.6.0)
+      base64
       httparty
 
 GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.3)
+    base64 (0.3.0)
     bigdecimal (3.2.2)
     csv (3.3.5)
     diff-lcs (1.6.2)
@@ -38,7 +40,7 @@ GEM
     rainbow (3.1.1)
     rake (13.3.0)
     regexp_parser (2.11.0)
-    rexml (3.4.1)
+    rexml (3.4.2)
     rspec (3.13.1)
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
