@@ -25,11 +25,5 @@ jobs:
         with:
           bundler-cache: false
           ruby-version: 3.2
-      - name: Install gem packages
-        run: |
-          gem install bundler
-          bundle config set frozen true
-          bundle install --jobs 4 --retry 3
-
       # Release
       - uses: rubygems/release-gem@v1
