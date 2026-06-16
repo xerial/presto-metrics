@@ -2,18 +2,20 @@ PATH
   remote: .
   specs:
     presto-metrics (0.6.0)
+      base64
       httparty
 
 GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.3)
-    bigdecimal (3.2.2)
+    base64 (0.3.0)
+    bigdecimal (4.1.2)
     csv (3.3.5)
     diff-lcs (1.6.2)
     faraday (0.17.6)
       multipart-post (>= 1.2, < 3)
-    httparty (0.23.1)
+    httparty (0.24.0)
       csv
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
@@ -22,8 +24,8 @@ GEM
     json (2.13.2)
     mini_mime (1.1.5)
     msgpack (1.8.0)
-    multi_xml (0.7.2)
-      bigdecimal (~> 3.1)
+    multi_xml (0.9.1)
+      bigdecimal (>= 3.1, < 5)
     multipart-post (2.4.1)
     mutex_m (0.3.0)
     parallel (1.27.0)
