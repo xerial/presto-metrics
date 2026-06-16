@@ -1,5 +1,6 @@
 ---
 fix: false
+ruby_version: 3.2
 format: progress # default: Standard::Formatter
 default_ignores: false # default: true
 
