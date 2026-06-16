@@ -36,11 +36,10 @@ autolabeler:
   - label: 'doc'
     files:
       - '*.md'
-      - '*.yaml'
   - label: 'bug'
     title:
       - '/fix/i'
   - label: 'deprecation'
     title:
       - '/deprecate/i'
-   
+
