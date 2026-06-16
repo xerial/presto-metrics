@@ -1,4 +1,5 @@
 # Presto::Metrics
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/xerial/presto-metrics)
 
 Presto is a distributed SQL engine, which launches coordinator and worker servers to process distributed queries in a cluster. We need to monitor the states of these coordinators/workers. Presto::Metrics is a library for accessing these states from Ruby.
 
