@@ -29,7 +29,7 @@ require 'presto/metrics'
 client = Presto::Metrics::Client.new  # Access to http://localhost:8080 in default
 
 # Alternatively, you can specify the host name and port number to use
-client = Presto::Metrics::Client.new(:host => "localhost", :port=>8080) 
+client = Presto::Metrics::Client.new(:host => "localhost", :port=>8080)
 
 
 client.os_metrics
@@ -205,7 +205,7 @@ pp client.gc_g1_metrics
 # Retrieve the JSON representation of JMX properties
 client.get_mbean_json("java.lang:Type=Memory")
 
-# Pretty print 
+# Pretty print
 require 'pp'
 pp c.memory_usage_metrics
 #{
@@ -253,8 +253,12 @@ irb> load "presto/metrics/client.rb"
 
 
 ### Releasing a new version
+
+Releases are published to RubyGems automatically via [rubygems/release-gem](https://github.com/rubygems/release-gem) when a version tag is pushed.
+`bundle exec rake release` is no longer required manually — CI runs it internally.
+
 ```
-# Update version in lib/presto/metrics/version.rb
-# Publish to RubyGem
-$ bundle exec rake release
+$ bundle exec rake bump[X.Y.Z]
 ```
+
+This updates `lib/presto/metrics/version.rb`, commits the change, creates a `vX.Y.Z` tag, and pushes both — triggering CI to publish to RubyGems automatically.
